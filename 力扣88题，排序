@@ -1,0 +1,23 @@
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int p1=0,p2=0;
+        int tmp[m+n];
+        int cnt = 0;
+        while(p1<m||p2<n){//每循环一次 p1或p2加1
+            if(p1==m){
+                cnt=nums2[p2++];
+            }else if(p2==n){
+                cnt=nums1[p1++];
+            }else if(nums1[p1]<nums2[p2]){
+                cnt=nums1[p1++];
+            }else{
+                cnt=nums2[p2++];
+            }
+            tmp[p1+p2-1] = cnt;
+        }
+        for(int i =0;i<m+n;i++){
+            nums1[i] = tmp[i];
+        }
+    }
+};
