@@ -1,3 +1,4 @@
+//法1：双指针排序
 class Solution {
 public:
     void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
@@ -19,5 +20,16 @@ public:
         for(int i =0;i<m+n;i++){
             nums1[i] = tmp[i];
         }
+    }
+};
+//法2：直接将nums2中数据插入到nums1中，在sort
+//sort()： sort(首元素地址(必填), 尾元素地址的下一个地址(必填), 比较函数(非必填,不填默认升序))
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        for(int i=0;i<n;i++){
+            nums1[m+i]=nums2[i];
+        }
+        sort(nums1.begin(),nums1.end());
     }
 };
