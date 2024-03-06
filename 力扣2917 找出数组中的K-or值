@@ -6,37 +6,37 @@ nums 中的 K-or 是一个满足以下条件的非负整数：
 注意 ：对于整数 x ，如果 (2i AND x) == 2i ，则 x 中的第 i 位值为 1 ，其中 AND 为按位与运算符。
 */
 
+// 大佬写法
+class Solution {
+public:
+    int findKOr(vector<int>& a, int k) {
+        int n = a.size();
+        int res = 0;
+        for (int i = 0; i <= 31; ++i) { //最大为 2 ^ 31 - 1，即二进制右起向左最多31位
+            int cnt = 0;
+            for (auto x: a) cnt += (x >> i & 1); //(x>>i&1) 此操作即为求x的第i位的值
+            if (cnt >= k) res += (1 << i); //(1<<i)即为2的i次方
+        }
+        return res;
+    }
+};
+
+
+
+
 class Solution {
 public:
     int findKOr(vector<int>& nums, int k) {
-       if(nums.size()==k){
-           int res = nums[0];
-           for(int i = 1;i<nums.size();i++){
-               res = res&nums[i];
-           }
-           return res;
-       }else if(k==1){
-           int res = nums[0];
-           for(int i = 1;i<nums.size();i++){
-               res = res|nums[i];
-           }
-           return res;
-       }else{
-           int tmp[10000];
-           int m=0;
-           for(int i = 0;i<31;i++){
-                int cnt = 0;
-                int p = pow(2,i);
-                for(int j = 0;j<nums.size();j++){
-                    if((p&nums[j])==p)    cnt++;
-                }
-                if(cnt>=k)  tmp[m++]=i;
-           }
-           int res=0;
-           for(int i = 0;i<m;i++){
-               res += pow(2,tmp[i]);
-           }
-           return res;
-       }
+       int res=0;
+        int m=0;
+        for(int i = 0;i<31;i++){ //最大为 2 ^ 31 - 1，即二进制右起向左最多31位
+             int cnt = 0;
+             int p = pow(2,i);
+             for(int n:nums){
+                if((p&n)==p)    cnt++;//(p&n)==p  操作即为求n的第i位的值 (2^i)&n=(2^i)
+             }
+             if(cnt>=k)  res+=pow(2,i);
+        }
+        return res;
     }
 };
