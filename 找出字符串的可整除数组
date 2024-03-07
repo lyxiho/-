@@ -18,7 +18,7 @@ public:
         else    res.push_back(0);
 
         for(int i=1;i<word.size();i++){
-            x = (x*10+(word[i]-'0'))%m; //(a×10+b) mod m=(a mod m × 10+b) mod m   模加法的分配律 (a+b) mod m = ((a mod m) + (b mod m)) mod m
+            x = (x*10+(word[i]-'0'))%m; //(a×10+b) mod m=(a mod m × 10+b) mod m   模加法的分配律 (a+b) mod m = ((a mod m) + (b mod m)) mod m    运用模运算的分配律进行前i位数据对m求模
                                         //                                        模乘法的分配律 (a*b) mod m = ((a mod m) * (b mod m)) mod m
             if(x==0) res.push_back(1);
             else    res.push_back(0);
@@ -26,8 +26,6 @@ public:
         return res;
     }
 };
-
-// 运用模运算的分配律进行前i位数据对m求模，解决可能会出现的溢出问题，本人在第一次自己做时，直接用 x = x*10+(word[i]-'0')  这样即使给x long long 仍会超出范围
 
 //大佬写法
 class Solution {
@@ -44,3 +42,26 @@ public:
         return res;
     }
 };
+
+// x * 10会超出int的范围 故上面两方法用 long long x
+// 在本题评论区看到答案可不运用long long解决问题
+class Solution {
+public:
+    vector<int> divisibilityArray(string word, int m) {
+        vector<int> res;
+        int cur = 0;
+        for (char& c : word) {
+            int tmp = cur;
+            for (int i = 0; i < 9; ++ i) {
+                cur = (cur + tmp) % m;   //运用加10次的方法来实现×10
+            }
+            cur = (cur + (c - '0')) % m;
+            res.push_back(cur == 0 ? 1 : 0);
+        }
+        return res;
+    }
+};
+
+
+
+
