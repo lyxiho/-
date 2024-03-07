@@ -1,0 +1,46 @@
+/*给你一个下标从 0 开始的字符串 word ，长度为 n ，由从 0 到 9 的数字组成。另给你一个正整数 m 。
+word 的 可整除数组 div  是一个长度为 n 的整数数组，并满足：
+    如果 word[0,...,i] 所表示的 数值 能被 m 整除，div[i] = 1
+    否则，div[i] = 0
+返回 word 的可整除数组。
+输入：word = "998244353", m = 3
+输出：[1,1,0,0,0,1,1,0,0]
+解释：仅有 4 个前缀可以被 3 整除："9"、"99"、"998244" 和 "9982443"*/
+
+//本人写法
+class Solution {
+public:
+    vector<int> divisibilityArray(string word, int m) {
+        vector<int> res;//结果数组
+
+        long long x = (word[0]-'0')%m; //字符串的数字-字符串'0'得到结果就是对应的数字
+        if(x==0) res.push_back(1);
+        else    res.push_back(0);
+
+        for(int i=1;i<word.size();i++){
+            x = (x*10+(word[i]-'0'))%m; //(a×10+b) mod m=(a mod m × 10+b) mod m   模加法的分配律 (a+b) mod m = ((a mod m) + (b mod m)) mod m
+                                        //                                        模乘法的分配律 (a*b) mod m = ((a mod m) * (b mod m)) mod m
+            if(x==0) res.push_back(1);
+            else    res.push_back(0);
+        }
+        return res;
+    }
+};
+
+// 运用模运算的分配律进行前i位数据对m求模，解决可能会出现的溢出问题，本人在第一次自己做时，直接用 x = x*10+(word[i]-'0')  这样即使给x long long 仍会超出范围
+
+//大佬写法
+class Solution {
+public:
+    vector<int> divisibilityArray(string word, int m) {
+        int n = word.size();
+        vector<int> res(n, 0);//创建包含n个整数的vector，每个元素初始值都为0
+        long long curr = 0;
+        for (int i =0;i<n;i++) {
+            curr = (curr * 10 + (word[i] - '0')) % m;
+            res[i] = curr == 0 ? 1 : 0;
+        }
+
+        return res;
+    }
+};
