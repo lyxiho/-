@@ -1,0 +1,36 @@
+/*
+给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i != j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请
+你返回所有和为 0 且不重复的三元组。
+注意：答案中不可以包含重复的三元组。
+*/
+
+class Solution {
+public:
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> res;
+        sort(nums.begin(), nums.end()); //先对数组进行排序
+        
+        for (int i = 0; i < nums.size() - 2; ++i) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue; //如果后一个数与前一个数相等，就直接进行下一层循环
+            int target = -nums[i];//设置一个旗子，让后两数之和等于第一个数取负
+            int left = i + 1, right = nums.size() - 1;
+            //双指针分别从数组剩余部分前后进行查找
+            while (left < right) {
+                int sum = nums[left] + nums[right];
+                if (sum == target) {
+                    res.push_back({nums[i], nums[left], nums[right]});
+                    while (left < right && nums[left] == nums[left + 1]) left++; //让左指针向右移动，直至与前一个数不相等，避免重复问题
+                    while (left < right && nums[right] == nums[right - 1]) right--; 
+                    left++;
+                    right--;
+                } else if (sum < target) {
+                    left++;
+                } else {
+                    right--;
+                }
+            }
+        }
+        
+        return res;
+    }
+};
