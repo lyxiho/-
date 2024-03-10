@@ -1,0 +1,41 @@
+小蓝有一个神奇的炉子用于将普通金属 O，冶炼成为一种特殊金属 X，这个炉子有一个称作转换率的属性 V，V是一个正整数，这意味着消耗 V个普通金属 O恰好可以冶炼出一个特殊金属 X，当普通金属 O的数目不足 V时，无法继续冶炼。
+现在给出了 N条冶炼记录，每条记录中包含两个整数 A和 B，这表示本次投入了 A个普通金属 O，最终冶炼出了 B个特殊金属 X。每条记录都是独立的，这意味着上一次没消耗完的普通金属 O不会累加到下一次的冶炼当中。
+根据这 N条冶炼记录，请你推测出转换率 V的最小值和最大值分别可能是多少，题目保证评测数据不存在无解的情况。
+//法1
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+  int N,a,b,min_1 = 0,max_1=1e9+10;
+  scanf("%d",&N);
+  for(int i=0;i<N;i++){
+      
+      scanf("%d%d",&a,&b);
+      max_1 = min(a/b,max_1);
+      min_1 = max(a/(b+1)+1,min_1);
+  }
+  printf("%d %d",min_1,max_1);
+  return 0;
+}
+//法2运用vector
+#include <bits/stdc++.h>
+using namespace std;
+int main()
+{
+  int N;
+  vector<int>A,B,V_max,V_min;
+  scanf("%d",&N);
+  for(int i=0;i<N;i++){
+        int a,b;
+        cin>>a>>b;
+      A.push_back(a),B.push_back(b);
+      V_max.push_back(A[i]/B[i]);
+      V_min.push_back(A[i]/(B[i]+1));
+  }
+
+  printf("%d %d",*(max_element(V_min.begin(),V_min.end()))+1,*min_element(V_max.begin(),V_max.end()));
+
+
+  return 0;
+}
