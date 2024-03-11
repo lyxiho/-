@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+/*
+例如 abcdad
+存在map中为(a,1),(b,2),(c,3)(d,4)
+当循环到第二个a时，发现在map中已经存在，让start为此时的a的下标,即为1，表示连续不重复最长字串从第2个字母开始计算
+
+unordered_map是一个将key和value关联起来的容器，它可以高效的根据单个key值查找对应的value。
+key值应该是唯一的，key和value的数据类型可以不相同。
+unordered_map存储元素时是没有顺序的，只是根据key的哈希值，将元素存在指定位置，所以根据key查找单个value时非常高效，平均可以在常数时间内完成。
+unordered_map查询单个key的时候效率比map高，但是要查询某一范围内的key值时比map效率低。
+可以使用[]操作符来访问key值对应的value值。
+
+*/
+int main(){
+	string A;
+	cin >> A;
+    int size = A.length();
+    int res = 0;
+    int start = 0;
+    unordered_map<int, int> map;
+    for (int end = 0; end < size; end++){
+        if (map.count(A[end])){//判断A[end]的值在map中是否存在
+            start = max(start, map[A[end]]);//如果存在，更新最长连续字串的起始位置
+        }
+        map[A[end]] = end+1;//给A[end]的value值赋值为end+1 计数作用
+        //赋值成end+1的作用：在上面的if语句中更新start的操作中，用存入map中的value值来表示连续子串的开始下标，因此要加从此值的下一个坐标开始
+        res = max(res, end - start + 1);//end-start+1即为此次循环求出的最大字串，每次都与res取最大值
+    }
+    cout << res << endl;
+	return 0;
+}
