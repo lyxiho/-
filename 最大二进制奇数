@@ -1,0 +1,44 @@
+给你一个 二进制 字符串 s ，其中至少包含一个 '1' 。
+你必须按某种方式 重新排列 字符串中的位，使得到的二进制数字是可以由该组合生成的 最大二进制奇数 。
+以字符串形式，表示并返回可以由给定组合生成的最大二进制奇数。
+注意 返回的结果字符串 可以 含前导零。
+
+class Solution {
+public:
+    vector<int>arr_0,arr_1;
+
+    string maximumOddBinaryNumber(string s) {
+        int n = s.size();
+        for(int i=0;i<n;i++){
+            int t = s[i]-'0';
+            if(t==0)    arr_0.push_back(t);
+            else    arr_1.push_back(t);
+        }
+        string res;
+        for(int i =0;i<arr_1.size()-1;i++){
+            res+='1';
+        }
+        for(int i=0;i<arr_0.size();i++){
+            res+='0';
+        }
+        res+='1';
+        return res;
+    }
+};
+
+//更优的解法
+class Solution {
+public:
+    string maximumOddBinaryNumber(string s) {
+        int len = s.size(),cnt=0;
+        string res(len,'0');//定义一个字符串，长度为len，初始化全为'0'
+        for(auto a:s){
+            if(a=='1')  cnt++;//统计原字符串中1的个数
+        }
+        res[len-1]='1';//将最后一位置为1
+        for(int i=0;i<cnt-1;i++){
+            res[i]='1';
+        }
+        return res;
+    }
+};
