@@ -1,0 +1,39 @@
+给你一个满足下述两条属性的 m x n 整数矩阵：
+每行中的整数从左到右按非严格递增顺序排列。
+每行的第一个整数大于前一行的最后一个整数。
+给你一个整数 target ，如果 target 在矩阵中，返回 true ；否则，返回 false 。
+
+输入：matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
+输出：true
+
+//整体思想，找到符合条件的一行进行二分查找
+
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        if(matrix.empty() || matrix[0].empty()) {//判空
+            return false;
+        }
+        int col = matrix[0].size();//列数
+        int cow = matrix.size();//行数
+        if(cow == 1 && col == 1) {//解决只有一个元素时的特殊情况
+            if(matrix[0][0] == target) return true;
+            else return false;
+        }
+        int flag_row=-1;
+        for(int i =0;i<cow;i++){
+            if(target<=matrix[i][col-1])    {flag_row = i;break;}
+        }
+        int l=0,r=col-1;
+        if(flag_row==-1)    return false;
+        else{
+            while(l<r){
+            int mid =l+r+1>>1;
+            if(matrix[flag_row][mid]<=target)    l=mid;
+            else r=mid-1;
+        }
+        if(target==matrix[flag_row][l]) return true;
+        else return false;
+        }
+    }
+};
