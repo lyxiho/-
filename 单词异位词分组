@@ -1,0 +1,33 @@
+给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。
+字母异位词 是由重新排列源单词的所有字母得到的一个新单词。
+输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+
+/*
+  整体思路：
+    先采用tmp保留strs的原始数据，将strs中每个单词的字母进行排序，将排序后的strs的下标和单词作为K,V存入hmap中
+    运用另一个哈希表reverse_hmap，K：单词(hamp的V)  V：tmp中下标i对应的单词(i即为hamp的K)
+    最后对reverse_hmap进行遍历，将value存入答案容器中返回
+*/
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<int,string> hmap;
+        unordered_map<string,vector<string>> reverse_hmap;
+        vector<string> tmp = strs;
+        vector<vector<string>> res;
+        int n = strs.size();
+        for(int i=0;i<strs.size();i++){
+            sort(strs[i].begin(),strs[i].end());
+            hmap[i]=strs[i];
+        }
+        for(auto a:hmap){
+            reverse_hmap[a.second].push_back(tmp[a.first]);
+        }
+        for(auto a:reverse_hmap){
+            res.push_back(a.second);
+        }
+        
+        return res;
+    }
+};
