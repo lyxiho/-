@@ -1,0 +1,36 @@
+给定两个字符串 s 和 p，找到 s 中所有 p 的 异位词 的子串，返回这些子串的起始索引。不考虑答案输出的顺序。
+异位词 指由相同字母重排列形成的字符串（包括相同的字符串）。
+输入: s = "cbaebabacd", p = "abc"
+输出: [0,6]
+解释:
+起始索引等于 0 的子串是 "cba", 它是 "abc" 的异位词。
+起始索引等于 6 的子串是 "bac", 它是 "abc" 的异位词
+
+//运用滑动窗口及哈希表
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        int n = s.size();
+        int m = p.size();
+        vector<int> res;
+        
+        vector<int> pCount(26, 0); //用于存放26个英文字母，用下标来代替a-z
+        vector<int> sCount(26, 0);
+        
+        for (char c : p) {
+            pCount[c - 'a']++; //先将目标字串p的字母存放在pCount中
+        }
+        
+        for (int i = 0; i < n; i++) {//窗口长度为p的长度m
+            sCount[s[i] - 'a']++;//将S字符串中字母依次存放哎sCount中
+            if (i >= m) {//当窗口长度大于m时，删除前面的字母在sCount中的计数
+                sCount[s[i - m] - 'a']--;
+            }
+            if (i >= m - 1 && sCount == pCount) {//此处 == 的判断方式为 依次判断下标对应的值是否相等
+                res.push_back(i - m + 1);//当窗口内的值与目标串值相等，插入到res容器内
+            }
+        }
+        
+        return res;
+    }
+};
