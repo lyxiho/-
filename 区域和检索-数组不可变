@@ -1,0 +1,26 @@
+给定一个整数数组  nums，处理以下类型的多个查询:
+计算索引 left 和 right （包含 left 和 right）之间的 nums 元素的 和 ，其中 left <= right
+实现 NumArray 类：
+NumArray(int[] nums) 使用数组 nums 初始化对象
+int sumRange(int i, int j) 返回数组 nums 中索引 left 和 right 之间的元素的 总和 ，包含 left 和 right 两点（也就是 nums[left] + nums[left + 1] + ... + nums[right] )
+
+输入：
+["NumArray", "sumRange", "sumRange", "sumRange"]
+[[[-2, 0, 3, -5, 2, -1]], [0, 2], [2, 5], [0, 5]]
+输出：
+[null, 1, -1, -3]
+
+class NumArray {
+public:
+    vector<int> arr;
+    NumArray(vector<int>& nums):arr(nums.size()+1,0) {//开辟arr数组，并为其开辟空间，类变量不能直接初始化，要在构造函数内
+        int n = nums.size();
+        for(int i=0;i<n;i++){
+            arr[i+1] = nums[i]+arr[i];//运用数组arr存储Nums的前n项和
+        }
+    }
+    
+    int sumRange(int left, int right) {
+        return arr[right+1]-arr[left];
+    }
+};
