@@ -1,0 +1,75 @@
+请你设计并实现一个能够对其中的值进行跟踪的数据结构，并支持对频率相关查询进行应答。
+实现 FrequencyTracker 类：
+FrequencyTracker()：使用一个空数组初始化 FrequencyTracker 对象。
+void add(int number)：添加一个 number 到数据结构中。
+void deleteOne(int number)：从数据结构中删除一个 number 。数据结构 可能不包含 number ，在这种情况下不删除任何内容。
+bool hasFrequency(int frequency): 如果数据结构中存在出现 frequency 次的数字，则返回 true，否则返回 false。
+输入
+["FrequencyTracker", "add", "add", "hasFrequency"]
+[[], [3], [3], [2]]
+输出
+[null, null, null, true]
+
+解释
+FrequencyTracker frequencyTracker = new FrequencyTracker();
+frequencyTracker.add(3); // 数据结构现在包含 [3]
+frequencyTracker.add(3); // 数据结构现在包含 [3, 3]
+frequencyTracker.hasFrequency(2); // 返回 true ，因为 3 出现 2 次
+
+//第一种写法：本人想出，提交在最后几个样例会超时，只维护了一个Map
+class FrequencyTracker {
+public:
+    map<int,int> hmap;
+    FrequencyTracker() {}
+    
+    void add(int number) {
+        hmap[number]++;
+    }
+    
+    void deleteOne(int number) {
+        if(hmap.count(number)){
+            hmap[number]--;
+            if(hmap[number]==0)    hmap.erase(number);
+        }  
+        else    return;
+    }
+    
+    bool hasFrequency(int frequency) {
+        bool flag = false;
+        for(auto a:hmap){
+            if(a.second==frequency) {flag = true;break;}
+        }
+        return flag;
+    }
+};
+
+//大佬解法：维护两个map，第一个用于存放number出现的次数，第二个存放出现次数的次数
+class FrequencyTracker {
+    unordered_map<int, int> cnt; // number 的出现次数
+    unordered_map<int, int> freq; // number 的出现次数的出现次数
+public:
+    FrequencyTracker() {}
+
+    void add(int number) {
+        --freq[cnt[number]]; // 去掉一个旧的 cnt[number]
+        ++freq[++cnt[number]]; // 添加一个新的 cnt[number]
+    }
+
+    void deleteOne(int number) {
+        if (!cnt[number]) return; // 不删除任何内容
+        --freq[cnt[number]]; // 去掉一个旧的 cnt[number]
+        ++freq[--cnt[number]]; // 添加一个新的 cnt[number]
+    }
+
+    bool hasFrequency(int frequency) {
+        return freq[frequency]; // 至少有一个 number 的出现次数恰好为 frequency
+    }
+
+};
+/**
+ * Your FrequencyTracker object will be instantiated and called as such:
+ * FrequencyTracker* obj = new FrequencyTracker();
+ * obj->add(number);
+ * obj->deleteOne(number);
+ * bool param_3 = obj->hasFrequency(frequency);
+ */
